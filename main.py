@@ -1,13 +1,13 @@
-#pip install -r requirements.txt
 from calculate_rsi import calculate_rsi_sum
 from get_data import get_daily_btcusd_candles
 
+#pip install -r requirements.txt
 
 if __name__ == "__main__":
     # Get daily BTC/USD candles
     btcusd_candles = get_daily_btcusd_candles()
     # Print the DataFrame
-    print(btcusd_candles)
+
     
     # # Generate some example price data
     # np.random.seed(0)
@@ -18,6 +18,8 @@ if __name__ == "__main__":
 
     # Calculate RSI with a 14-day period
     (rsi,rsi_sma) = calculate_rsi_sum(btcusd_candles['c'], period=14)
-    
+    for i, x in enumerate(rsi):
+      print(i,x>rsi_sma[i],btcusd_candles['date'][i])
+     
 
-    print(rsi,rsi_sma)
+

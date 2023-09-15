@@ -13,7 +13,7 @@ def get_daily_btcusd_candles():
 
     prices = data['data']
     prices.reverse()
-    print(prices[0])
+
 
     # Create a DataFrame
     df = pd.DataFrame(prices )
