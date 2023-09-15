@@ -8,10 +8,11 @@ def get_daily_btcusd_candles():
     response = requests.get(url )
     data = response.json()
 
-
+    
     # Extract timestamps and prices
 
     prices = data['data']
+    prices.reverse()
     print(prices[0])
 
     # Create a DataFrame
@@ -20,6 +21,12 @@ def get_daily_btcusd_candles():
 
     # Convert timestamps to datetime
     df["date"] = pd.to_datetime(df["date"], unit='s', origin='unix')
+    df["o"] = pd.to_numeric(df["o"])
+    df["h"] = pd.to_numeric(df["h"])
+    df["l"] = pd.to_numeric(df["l"])
+    df["c"] = pd.to_numeric(df["c"])
+    
+    df.drop(index=df.index[-1],axis=0,inplace=True)
 
     return df
 if __name__ == "__main__":
