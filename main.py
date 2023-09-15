@@ -1,4 +1,5 @@
 #pip install -r requirements.txt
+from calculate_rsi import calculate_rsi_sum
 from get_data import get_daily_btcusd_candles
 
 
