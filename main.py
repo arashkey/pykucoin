@@ -1,5 +1,6 @@
 from calculate_rsi import calculate_rsi_sum
 from get_data import get_daily_btcusd_candles
+import math 
 
 #pip install -r requirements.txt
 
@@ -18,8 +19,32 @@ if __name__ == "__main__":
 
     # Calculate RSI with a 14-day period
     (rsi,rsi_sma) = calculate_rsi_sum(btcusd_candles['c'], period=14)
+    isBuy=False
+    sum=0
+    price=0
+    buyPrice=0
+   
     for i, x in enumerate(rsi):
-      print(i,x>rsi_sma[i],btcusd_candles['date'][i])
+      if(i>14 and math.isnan( rsi_sma[i-1]) ==False):
+        rx = round(x)
+        rrsi_sma = round(rsi_sma[i])
+        if( isBuy == False and rx>rrsi_sma ):
+            print(i,rx,rrsi_sma,btcusd_candles['date'][i])
+            buyPrice=btcusd_candles['c'][i]
+            print('buy in ' +str(buyPrice))
+            isBuy=True
+        elif ( isBuy == True and rx<rrsi_sma  ):
+            print(i,rx,rrsi_sma,btcusd_candles['date'][i])
+            price=btcusd_candles['c'][i]
+            diffPrice=price-buyPrice
+            print('close buy in ' +str(price)+' prifit: '+str(diffPrice)+'\n')
+            sum+= diffPrice         
+            isBuy=False
+
+    print('sum= ',str(sum))
+
+
+
      
 
 
