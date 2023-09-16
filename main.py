@@ -6,7 +6,7 @@ import math
 
 if __name__ == "__main__":
     # Get daily BTC/USD candles
-    btcusd_candles = get_daily_btcusd_candles()
+    btcusd_candles = get_daily_btcusd_candles(365)
     # Print the DataFrame
 
     
@@ -21,29 +21,43 @@ if __name__ == "__main__":
     (rsi,rsi_sma,maShort,maLong) = calculate(btcusd_candles['c'], rsiSmaPeriod=14)
     isBuy=False
     sum=0
-    price=0
+    closeBuyPrice=0
     buyPrice=0
-   
+    lossPercent=0.05
+    isWithLoss=True
+    stopLoss=0
+    shortSubLong=0
+    isCheck=False
     for i, x in enumerate(rsi):
       if(i>14 and math.isnan( rsi_sma[i-1]) ==False):
         rx = round(x)
         rrsi_sma = round(rsi_sma[i])
         rmaShort = round(maShort[i])
         rmaLong = round(maLong[i])
-        if( isBuy == False and rx>rrsi_sma):
+        c = btcusd_candles['c'][i]
+        shortSubLong = rmaShort-rmaLong
+        #print('shortSubLong',shortSubLong)
+  
+        if( isBuy == False  and rx>rrsi_sma and rmaShort>rmaLong+(rmaLong*0.01)  ):
             print(i,rx,rrsi_sma,btcusd_candles['date'][i])
             buyPrice=btcusd_candles['c'][i]
-            print('buy in ' +str(buyPrice))
             isBuy=True
-        elif ( isBuy == True and rx<rrsi_sma  ):
+            stopLoss=buyPrice-(buyPrice*lossPercent)
+            print('buy in ' +str(buyPrice)+f' ({stopLoss})')
+            
+            #rmaShort<rmaLong 
+        elif ( isBuy == True and (rx<rrsi_sma  or (isWithLoss and c<stopLoss))):
             print(i,rx,rrsi_sma,btcusd_candles['date'][i])
-            price=btcusd_candles['c'][i]
-            diffPrice=price-buyPrice
-            print('close buy in ' +str(price)+' prifit: '+str(diffPrice)+'\n')
+            if(isWithLoss and c<stopLoss):
+               print('loss = '+str(stopLoss))
+            closeBuyPrice=btcusd_candles['c'][i]
+            diffPrice=closeBuyPrice-buyPrice
+            print('close buy in ' +str(closeBuyPrice)+' prifit: '+str(int(diffPrice))+'\n')
             sum+= diffPrice         
             isBuy=False
+            
 
-    print('sum= ',str(sum))
+    print('sum= ',str(int(sum)))
 
 
 

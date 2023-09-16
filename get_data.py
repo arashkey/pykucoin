@@ -1,8 +1,17 @@
 import requests
 import pandas as pd
 
-def get_daily_btcusd_candles():
-    url = "https://api.kucoin.com/api/v1/market/candles?type=1day&symbol=BTC-USDT"
+import datetime
+import time
+
+def get_daily_btcusd_candles(numOfDay=100):
+    ms = datetime.datetime.now()
+    startms = ms+ datetime.timedelta(days=-1*numOfDay)
+     
+    startAt= int(time.mktime(startms.timetuple()))
+    endAt=int(time.mktime(ms.timetuple()))
+
+    url = f"https://api.kucoin.com/api/v1/market/candles?type=1day&symbol=BTC-USDT&startAt={startAt}&endAt={endAt}"
      
 
     response = requests.get(url )
