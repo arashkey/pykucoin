@@ -4,14 +4,14 @@ import pandas as pd
 import datetime
 import time
 
-def get_daily_btcusd_candles(numOfDay=100):
+def get_candles(numOfDay=100,coin='BTC-USDT',duration='1day'):
     ms = datetime.datetime.now()
     startms = ms+ datetime.timedelta(days=-1*numOfDay)
      
     startAt= int(time.mktime(startms.timetuple()))
     endAt=int(time.mktime(ms.timetuple()))
 
-    url = f"https://api.kucoin.com/api/v1/market/candles?type=1day&symbol=BTC-USDT&startAt={startAt}&endAt={endAt}"
+    url = f"https://api.kucoin.com/api/v1/market/candles?type={duration}&symbol={coin}&startAt={startAt}&endAt={endAt}"
      
 
     response = requests.get(url )
@@ -40,7 +40,7 @@ def get_daily_btcusd_candles(numOfDay=100):
     return df
 if __name__ == "__main__":
     # Get daily BTC/USD candles
-    btcusd_candles = get_daily_btcusd_candles()
+    btcusd_candles = get_candles()
     # Print the DataFrame
     print(btcusd_candles)
 
