@@ -32,7 +32,7 @@ def calculate_result(candles
             isBuy=True
             stopLoss=buyPrice-(buyPrice*stopLossPercent)
             if(isPrint):
-                print('buy in ' +str(buyPrice)+f' ({stopLoss})')
+                print('buy in ' +str(buyPrice)+f' ({int(stopLoss)})')
             
             #rmaShort<rmaLong 
         elif ( isBuy == True and (rx<rrsi_sma  or (isWithLoss and c<stopLoss))):
@@ -50,14 +50,17 @@ def calculate_result(candles
 
 if __name__ == "__main__":
 
-    numberOfDay=300
     coin='BTC-USDT'
     duration='4hour'
+    numberOfDay=100
+    bigx=2
+    bigy=1
+    
+    
+    
     max=0
-    bigx=0
-    bigy=0
-    for d in range(4, 200,4):
-        candles = get_candles(d,coin,duration)
+    for d in range(1, 8*numberOfDay,numberOfDay):
+        candles = get_candles(d+numberOfDay,coin,duration,numOfDayEnd=d)
         for x in range(1, 10):     
             for y in range(1, 10):     
                 sum = calculate_result(candles
@@ -72,7 +75,17 @@ if __name__ == "__main__":
                     bigx=x
                     bigy=y
 
-    print(bigx,bigy,int(max))
+    
+    candles = get_candles(numberOfDay+300,coin,duration,numOfDayEnd=1)
+    sum = calculate_result(candles
+                        ,isWithLoss=True
+                        ,stopLossPercent=bigx/100,rmaPercent=bigy/100
+                        ,isPrint=True)
+            
+
+    print(f'{bigx} {bigy} sum= {int(sum)}')
+
+
 
 
 
