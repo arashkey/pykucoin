@@ -1,10 +1,14 @@
+import datetime
 from calculate_parames import calculate
 from get_data import get_candles
 import math 
 
 #pip install -r requirements.txt
 
-def calculate_result(numberOfDay=100,coin='BTC-USDT',duration='1day',isWithLoss=True,stopLossPercent=0.05,rmaPercent=0.01):
+def calculate_result(numberOfDay=100
+                     ,coin='BTC-USDT',duration='1day'
+                     ,isWithLoss=True
+                     ,stopLossPercent=0.05,rmaPercent=0.01):
     
     btcusd_candles = get_candles(numberOfDay,coin,duration)
     (rsi,rsi_sma,maShort,maLong) = calculate(btcusd_candles['c'], rsiSmaPeriod=14)
@@ -25,7 +29,7 @@ def calculate_result(numberOfDay=100,coin='BTC-USDT',duration='1day',isWithLoss=
         #print('shortSubLong',shortSubLong)
   
         if( isBuy == False  and rx>rrsi_sma and rmaShort>rmaLong+(rmaLong*rmaPercent)  ):
-            print(i,rx,rrsi_sma,btcusd_candles['date'][i])
+            #print(i,rx,rrsi_sma,btcusd_candles['date'][i])
             buyPrice=btcusd_candles['c'][i]
             isBuy=True
             stopLoss=buyPrice-(buyPrice*stopLossPercent)
@@ -33,7 +37,7 @@ def calculate_result(numberOfDay=100,coin='BTC-USDT',duration='1day',isWithLoss=
             
             #rmaShort<rmaLong 
         elif ( isBuy == True and (rx<rrsi_sma  or (isWithLoss and c<stopLoss))):
-            print(i,rx,rrsi_sma,btcusd_candles['date'][i])
+            #print(i,rx,rrsi_sma,btcusd_candles['date'][i])
             if(isWithLoss and c<stopLoss):
                print('loss = '+str(stopLoss))
             closeBuyPrice=btcusd_candles['c'][i]
@@ -56,7 +60,10 @@ if __name__ == "__main__":
     # df = pd.DataFrame(price_data, columns=['Close'])
 
     # Calculate RSI with a 14-day period
-    sum = calculate_result(numberOfDay=100,coin='BTC-USDT',duration='1hour',isWithLoss=True,stopLossPercent=0.05,rmaPercent=0.01)
+    sum = calculate_result(numberOfDay=100
+                           ,coin='ETH-USDT',duration='4hour'
+                           ,isWithLoss=True
+                           ,stopLossPercent=0.05,rmaPercent=0.02)
             
 
     print('sum= ',str(int(sum)))
