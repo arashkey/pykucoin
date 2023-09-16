@@ -1,3 +1,4 @@
+import datetime
 from calculate_parames import calculate
 from get_data import get_candles
 import math 
