@@ -4,10 +4,12 @@ import math
 
 #pip install -r requirements.txt
 
-def calculate_result(numberOfDay=100,coin='BTC-USDT',duration='1day',isWithLoss=True,stopLossPercent=0.05,rmaPercent=0.01):
+def calculate_result(candles 
+                     ,isWithLoss=True
+                     ,stopLossPercent=0.05,rmaPercent=0.01
+                     ,isPrint=False):
     
-    btcusd_candles = get_candles(numberOfDay,coin,duration)
-    (rsi,rsi_sma,maShort,maLong) = calculate(btcusd_candles['c'], rsiSmaPeriod=14)
+    (rsi,rsi_sma,maShort,maLong) = calculate(candles['c'], rsiSmaPeriod=14)
     isBuy=False
     sum=0
     closeBuyPrice=0
@@ -21,24 +23,27 @@ def calculate_result(numberOfDay=100,coin='BTC-USDT',duration='1day',isWithLoss=
         rrsi_sma = round(rsi_sma[i])
         rmaShort = round(maShort[i])
         rmaLong = round(maLong[i])
-        c = btcusd_candles['c'][i]
+        c = candles['c'][i]
         #print('shortSubLong',shortSubLong)
   
         if( isBuy == False  and rx>rrsi_sma and rmaShort>rmaLong+(rmaLong*rmaPercent)  ):
-            print(i,rx,rrsi_sma,btcusd_candles['date'][i])
-            buyPrice=btcusd_candles['c'][i]
+            #print(i,rx,rrsi_sma,btcusd_candles['date'][i])
+            buyPrice=candles['c'][i]
             isBuy=True
             stopLoss=buyPrice-(buyPrice*stopLossPercent)
-            print('buy in ' +str(buyPrice)+f' ({stopLoss})')
+            if(isPrint):
+                print('buy in ' +str(buyPrice)+f' ({stopLoss})')
             
             #rmaShort<rmaLong 
         elif ( isBuy == True and (rx<rrsi_sma  or (isWithLoss and c<stopLoss))):
-            print(i,rx,rrsi_sma,btcusd_candles['date'][i])
+            #print(i,rx,rrsi_sma,btcusd_candles['date'][i])
             if(isWithLoss and c<stopLoss):
-               print('loss = '+str(stopLoss))
-            closeBuyPrice=btcusd_candles['c'][i]
+               if(isPrint):
+                print('loss = '+str(stopLoss))
+            closeBuyPrice=candles['c'][i]
             diffPrice=closeBuyPrice-buyPrice
-            print('close buy in ' +str(closeBuyPrice)+' prifit: '+str(int(diffPrice))+'\n')
+            if(isPrint):
+                print('close buy in ' +str(closeBuyPrice)+' prifit: '+str(int(diffPrice))+'\n')
             sum+= diffPrice         
             isBuy=False
     return sum
@@ -56,10 +61,29 @@ if __name__ == "__main__":
     # df = pd.DataFrame(price_data, columns=['Close'])
 
     # Calculate RSI with a 14-day period
-    sum = calculate_result(numberOfDay=100,coin='BTC-USDT',duration='1hour',isWithLoss=True,stopLossPercent=0.05,rmaPercent=0.01)
-            
+    
+    numberOfDay=300
+    coin='DIG-USDT'
+    duration='4hour'
+    candles = get_candles(numberOfDay,coin,duration)
+    max=0
+    bigx=0
+    bigy=0
+    for x in range(1, 10):     
+        for y in range(1, 10):     
+            sum = calculate_result(candles
+                                ,isWithLoss=True
+                                ,stopLossPercent=x/100,rmaPercent=y/100
+                                ,isPrint=False)
+                    
 
-    print('sum= ',str(int(sum)))
+            print(f'{x} {y} sum= {int(sum)}')
+            if(sum>max):
+               max=sum
+               bigx=x
+               bigy=y
+
+    print(bigx,bigy,max)
 
 
 

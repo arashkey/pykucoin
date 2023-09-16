@@ -1,3 +1,4 @@
+import warnings
 import requests
 import pandas as pd
 
@@ -29,7 +30,9 @@ def get_candles(numOfDay=100,coin='BTC-USDT',duration='1day'):
     df.columns = ["date","o","c","h","l","v","vw"]
 
     # Convert timestamps to datetime
-    df["date"] = pd.to_datetime(df["date"], unit='s', origin='unix')
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        df["date"] = pd.to_datetime(df["date"], unit='s', origin='unix')
     df["o"] = pd.to_numeric(df["o"])
     df["h"] = pd.to_numeric(df["h"])
     df["l"] = pd.to_numeric(df["l"])
