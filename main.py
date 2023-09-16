@@ -1,4 +1,4 @@
-from calculate_rsi import calculate_rsi_sum
+from calculate_parames import calculate
 from get_data import get_daily_btcusd_candles
 import math 
 
@@ -18,7 +18,7 @@ if __name__ == "__main__":
     # df = pd.DataFrame(price_data, columns=['Close'])
 
     # Calculate RSI with a 14-day period
-    (rsi,rsi_sma) = calculate_rsi_sum(btcusd_candles['c'], period=14)
+    (rsi,rsi_sma,maShort,maLong) = calculate(btcusd_candles['c'], rsiSmaPeriod=14)
     isBuy=False
     sum=0
     price=0
@@ -28,7 +28,9 @@ if __name__ == "__main__":
       if(i>14 and math.isnan( rsi_sma[i-1]) ==False):
         rx = round(x)
         rrsi_sma = round(rsi_sma[i])
-        if( isBuy == False and rx>rrsi_sma ):
+        rmaShort = round(maShort[i])
+        rmaLong = round(maLong[i])
+        if( isBuy == False and rx>rrsi_sma):
             print(i,rx,rrsi_sma,btcusd_candles['date'][i])
             buyPrice=btcusd_candles['c'][i]
             print('buy in ' +str(buyPrice))
