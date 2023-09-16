@@ -1,6 +1,6 @@
 # pykucoin strategies 
 This strategy is to find out when to buy Bitcoin. The relevant data is read from the Kucoin server. 
-In addition, its programming language is Python.
+In addition, its programming language is Python3.
 ## Run
 For run this project run this command in your command prompt 
 ```
