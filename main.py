@@ -64,7 +64,7 @@ if __name__ == "__main__":
     # Calculate RSI with a 14-day period
     
     numberOfDay=300
-    coin='DIG-USDT'
+    coin='BTC-USDT'
     duration='4hour'
     candles = get_candles(numberOfDay,coin,duration)
     max=0
