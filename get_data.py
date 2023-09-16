@@ -15,7 +15,10 @@ def get_candles(numOfDay=100,coin='BTC-USDT',duration='1day'):
     url = f"https://api.kucoin.com/api/v1/market/candles?type={duration}&symbol={coin}&startAt={startAt}&endAt={endAt}"
      
 
-    response = requests.get(url )
+    try:
+        response = requests.get(url )
+    except requests.exceptions.RequestException as e:  # This is the correct syntax
+        raise SystemExit(e)
     data = response.json()
 
     

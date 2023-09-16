@@ -1,4 +1,3 @@
-import datetime
 from calculate_parames import calculate
 from get_data import get_candles
 import math 
@@ -50,41 +49,30 @@ def calculate_result(candles
     return sum
 
 if __name__ == "__main__":
-    # Get daily BTC/USD candles
-    # Print the DataFrame
 
-    
-    # # Generate some example price data
-    # np.random.seed(0)
-    # price_data = np.random.rand(50) * 10 + 90  # Generate random prices between 90 and 100
-
-    # # Create a pandas DataFrame
-    # df = pd.DataFrame(price_data, columns=['Close'])
-
-    # Calculate RSI with a 14-day period
-    
     numberOfDay=300
     coin='BTC-USDT'
     duration='4hour'
-    candles = get_candles(numberOfDay,coin,duration)
     max=0
     bigx=0
     bigy=0
-    for x in range(1, 10):     
-        for y in range(1, 10):     
-            sum = calculate_result(candles
-                                ,isWithLoss=True
-                                ,stopLossPercent=x/100,rmaPercent=y/100
-                                ,isPrint=False)
-                    
+    for d in range(4, 200,4):
+        candles = get_candles(d,coin,duration)
+        for x in range(1, 10):     
+            for y in range(1, 10):     
+                sum = calculate_result(candles
+                                    ,isWithLoss=True
+                                    ,stopLossPercent=x/100,rmaPercent=y/100
+                                    ,isPrint=False)
+                        
 
-            print(f'{x} {y} sum= {int(sum)}')
-            if(sum>max):
-               max=sum
-               bigx=x
-               bigy=y
+                print(f'{x} {y} sum= {int(sum)}')
+                if(sum>max):
+                    max=sum
+                    bigx=x
+                    bigy=y
 
-    print(bigx,bigy,max)
+    print(bigx,bigy,int(max))
 
 
 
